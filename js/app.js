@@ -1,20 +1,25 @@
 let posts = [];
+let count = 0;
+
 
 const likedPostsId = [];
 const reportedPostsId = [];
 
 const getLikedPosts = () => {
+  
   return posts.filter((post) => likedPostsId.includes(post.id));
 };
 
 const getReportedPosts = () => {
+
   return posts.filter((post) => reportedPostsId.includes(post.id));
+
 };
 
 const isLiked = (id) => {
   return likedPostsId?.length && !!likedPostsId.includes(id);
 };
-// problem1
+
 const addToLiked = (id) => {
   likedPostsId.push(id);
   showPosts(posts);
@@ -27,11 +32,11 @@ const reportPost = (id) => {
 };
 
 const displayContent = (text) => {
-  // problem3
   return text.length < 30 ? text.slice(0, 30) : text.slice(0, 30) + "<span class='fw-bold'>... read more</span>";
 };
 
 const switchTab = (id) => {
+
   if (id === "posts") {
     document.getElementById("posts").style.display = "grid";
     document.getElementById("liked").style.display = "none";
@@ -42,6 +47,7 @@ const switchTab = (id) => {
     document.getElementById("reported").style.display = "none";
 
     displayLikedPosts();
+
   } else {
     document.getElementById("reported").style.display = "block";
     document.getElementById("posts").style.display = "none";
@@ -55,7 +61,6 @@ const createPost = (post) => {
   const image = post.image;
   const commentText = post.comments[0]?.text;
   const commentUser = post.comments[0]?.user;
-  // console.log(post.comments?.user);
   const div = document.createElement("article");
   div.classList.add("post");
   div.innerHTML = `
@@ -146,19 +151,26 @@ const showPosts = (posts) => {
 };
 
 const displayLikedPosts = () => {
-  const likedPosts = getLikedPosts();
-  likedPosts.forEach((post) => {
-    const div = createPost(post);
-    document.getElementById("liked").appendChild(div);
-  });
-};
-// problem5
+  const likedPosts = getLikedPosts() ;
+  if(likedPosts.length == likedPosts.length + count){
+    likedPosts.forEach((post) => {
+      const div = createPost(post);
+      document.getElementById("liked").appendChild(div);
+    count++
+    });
+  }
+  else{
+    return [];
+  }
+  }
+
 const displayReportedPosts = () => {
   const reportedPosts = getReportedPosts();
-  reportedPosts.forEach((post) => {
-    const div = createPost(post);
-    document.getElementById("reported").appendChild(div);
-  });
+    reportedPosts.forEach((post) => {
+      const div = createPost(post);
+      document.getElementById("reported").appendChild(div);
+    });
+ 
 };
 
 const loadPosts = async () => {
